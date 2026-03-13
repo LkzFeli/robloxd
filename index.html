@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RobloxD — CCU Engineering</title>
+    <title>RobloxD — CCU Engineering v3.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -20,12 +20,13 @@
             color: #f4f4f5;
             margin: 0;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* UI Dinámica */
+        /* --- UI MODERNA --- */
         .glass-header {
             background: rgba(5, 5, 5, 0.85);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--border);
             z-index: 1000;
         }
@@ -33,8 +34,8 @@
         .game-card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 28px;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 24px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             position: relative;
             overflow: hidden;
         }
@@ -42,64 +43,75 @@
         .game-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: var(--rbx-red);
-            box-shadow: 0 25px 50px -12px rgba(232, 56, 77, 0.2);
+            box-shadow: 0 30px 60px -12px rgba(232, 56, 77, 0.25);
         }
 
-        /* Vistas */
-        .view { display: none; opacity: 0; transform: translateY(15px); transition: all 0.5s ease; }
+        .game-card img { transition: transform 0.6s ease; }
+        .game-card:hover img { transform: scale(1.1); }
+
+        /* --- SISTEMA DE VISTAS --- */
+        .view { display: none; opacity: 0; transform: translateY(20px); transition: all 0.5s ease-out; }
         .view.active { display: block; opacity: 1; transform: translateY(0); }
 
-        /* Skeletons Animados */
+        /* --- SKELETONS --- */
         .shimmer {
-            background: linear-gradient(90deg, #111 25%, #1d1d1d 50%, #111 75%);
+            background: linear-gradient(90deg, #0a0a0a 25%, #151515 50%, #0a0a0a 75%);
             background-size: 200% 100%;
-            animation: loading 1.5s infinite linear;
+            animation: loading 1.8s infinite linear;
         }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        /* Consola de Logs */
+        /* --- TERMINAL DE LOGS --- */
         #terminal {
             position: fixed;
             bottom: 0; left: 0; width: 100%; height: 35px;
             background: #000; color: #0f0;
             font-family: 'Courier New', monospace; font-size: 11px;
-            padding: 8px 20px; border-top: 1px solid var(--border);
+            padding: 10px 20px; border-top: 1px solid var(--border);
             z-index: 2000; transition: height 0.3s ease; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between;
         }
-        #terminal.open { height: 180px; overflow-y: auto; }
+        #terminal.open { height: 200px; display: block; overflow-y: auto; }
+        .log-line { margin-bottom: 4px; border-left: 2px solid #333; padding-left: 8px; }
 
-        /* Estrellas */
-        .stars span { cursor: pointer; transition: 0.2s; font-size: 1.8rem; color: #222; }
-        .stars .active { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
+        /* --- ESTRELLAS --- */
+        .stars span { cursor: pointer; transition: 0.2s; font-size: 2rem; color: #1a1a1a; }
+        .stars .active { color: #fbbf24; text-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
 
-        .btn-primary {
-            background: var(--rbx-red);
-            transition: all 0.3s ease;
+        .badge-ccu {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
         }
-        .btn-primary:hover {
-            filter: brightness(1.2);
-            transform: scale(1.03);
-            box-shadow: 0 10px 20px rgba(232, 56, 77, 0.3);
-        }
+
+        /* --- SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--rbx-red); }
     </style>
 </head>
-<body class="pb-20">
+<body class="pb-24">
 
     <header class="glass-header fixed top-0 w-full">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <h1 class="text-2xl font-800 tracking-tighter cursor-pointer" onclick="Router.go('home')">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6">
+            <h1 class="text-2xl font-800 tracking-tighter cursor-pointer flex-shrink-0" onclick="Router.go('home')">
                 ROBLOX<span class="text-[#E8384D]">D</span>
             </h1>
 
-            <div class="flex-1 max-w-xl mx-10 relative">
+            <div class="flex-1 max-w-xl relative">
                 <input type="text" id="searchInput" onkeypress="if(event.key==='Enter') App.search(this.value)"
-                    placeholder="Buscar en la base de datos de CCUCheck..." 
-                    class="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 px-6 text-sm focus:outline-none focus:border-[#E8384D] transition">
+                    placeholder="Buscar juegos (CCUCheck Engine)..." 
+                    class="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-6 text-sm focus:outline-none focus:border-[#E8384D] transition shadow-inner">
             </div>
 
-            <nav class="flex items-center gap-6">
-                <button onclick="Router.go('profile')" class="text-sm font-bold hover:text-[#E8384D] transition">Mi Perfil</button>
-                <div class="w-10 h-10 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center font-bold text-xs">SF</div>
+            <nav class="flex items-center gap-6 flex-shrink-0">
+                <button onclick="Router.go('profile')" class="text-sm font-bold hover:text-[#E8384D] transition hidden sm:block">Perfil</button>
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-zinc-800 to-black border border-white/10 flex items-center justify-center font-bold text-xs shadow-lg">SF</div>
             </nav>
         </div>
     </header>
@@ -107,18 +119,18 @@
     <main class="pt-32 px-6 max-w-7xl mx-auto">
         
         <section id="view-home" class="view active">
-            <div class="flex justify-between items-end mb-10">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
                 <div>
-                    <h2 class="text-4xl font-800 tracking-tighter">Explorar Experiencias</h2>
-                    <p class="text-zinc-500 text-sm mt-1 font-medium">Análisis de CCU y métricas de rendimiento.</p>
+                    <h2 class="text-4xl font-800 tracking-tighter">Explorar</h2>
+                    <p class="text-zinc-500 text-sm mt-1 font-medium italic">Datos filtrados por RoTunnel API</p>
                 </div>
-                <div id="status-indicator" class="flex items-center gap-2 bg-zinc-900 px-3 py-1.5 rounded-full border border-white/5">
+                <div id="status-indicator" class="flex items-center gap-3 bg-zinc-900/50 px-4 py-2 rounded-2xl border border-white/5">
                     <div class="w-2 h-2 rounded-full bg-yellow-500" id="dot"></div>
-                    <span class="text-[10px] font-black uppercase tracking-widest text-zinc-400" id="status-text">Iniciando...</span>
+                    <span class="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400" id="status-text">Buscando señales...</span>
                 </div>
             </div>
 
-            <div id="grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+            <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8">
                 </div>
         </section>
 
@@ -127,57 +139,64 @@
         </section>
 
         <section id="view-profile" class="view">
-            <div class="grid lg:grid-cols-3 gap-10">
+            <div class="grid lg:grid-cols-3 gap-12">
                 <div class="lg:col-span-1 space-y-6">
-                    <div class="game-card p-10 text-center">
-                        <div class="w-24 h-24 bg-[#E8384D]/10 text-[#E8384D] rounded-[2rem] mx-auto mb-6 flex items-center justify-center text-3xl font-black">SF</div>
+                    <div class="game-card p-10 text-center border-b-4 border-b-[#E8384D]">
+                        <div class="w-28 h-28 bg-[#E8384D]/10 text-[#E8384D] rounded-3xl mx-auto mb-6 flex items-center justify-center text-4xl font-black shadow-inner">SF</div>
                         <h3 class="text-2xl font-800">sannfe</h3>
-                        <p class="text-zinc-500 text-sm mb-8">Villa Bosch, Argentina</p>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-                                <span class="block text-2xl font-800" id="stat-count">0</span>
-                                <span class="text-[9px] font-black text-zinc-600 uppercase">Reviews</span>
+                        <p class="text-zinc-500 text-[10px] font-black uppercase tracking-[0.3em] mt-2">Villa Bosch // Dev</p>
+                        <div class="grid grid-cols-2 gap-4 mt-10">
+                            <div class="bg-black/60 p-5 rounded-3xl border border-white/5">
+                                <span class="block text-3xl font-800" id="stat-count">0</span>
+                                <span class="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Logs</span>
                             </div>
-                            <div class="bg-black/40 p-4 rounded-2xl border border-white/5">
-                                <span class="block text-2xl font-800 text-yellow-500" id="stat-avg">0.0</span>
-                                <span class="text-[9px] font-black text-zinc-600 uppercase">Promedio</span>
+                            <div class="bg-black/60 p-5 rounded-3xl border border-white/5">
+                                <span class="block text-3xl font-800 text-yellow-500" id="stat-avg">0.0</span>
+                                <span class="text-[9px] font-black text-zinc-600 uppercase tracking-widest">Global</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="lg:col-span-2">
-                    <h4 class="text-xl font-800 mb-6 tracking-tight">Actividad Reciente</h4>
-                    <div id="review-list" class="space-y-4"></div>
+                    <h4 class="text-xl font-800 mb-8 flex items-center gap-3">
+                        <span class="w-2 h-8 bg-[#E8384D] rounded-full"></span>
+                        Historial de Análisis Técnicos
+                    </h4>
+                    <div id="review-list" class="space-y-6"></div>
                 </div>
             </div>
         </section>
     </main>
 
-    <div id="modal" class="fixed inset-0 bg-black/95 z-[5000] hidden flex items-center justify-center p-6 backdrop-blur-md">
-        <div class="bg-zinc-900 border border-white/10 w-full max-w-md rounded-[2.5rem] p-10">
-            <h3 class="text-2xl font-800 mb-2">Nueva Reseña</h3>
-            <p id="modal-game" class="text-[#E8384D] font-bold text-xs uppercase tracking-widest mb-8"></p>
+    <div id="modal" class="fixed inset-0 bg-black/95 z-[5000] hidden flex items-center justify-center p-6 backdrop-blur-xl">
+        <div class="bg-[#0c0c0c] border border-white/10 w-full max-w-md rounded-[3rem] p-10 shadow-2xl overflow-hidden relative">
+            <div class="absolute top-0 left-0 w-full h-1 bg-[#E8384D]"></div>
+            <h3 class="text-3xl font-800 mb-2">Nueva Reseña</h3>
+            <p id="modal-game" class="text-zinc-500 font-bold text-xs uppercase tracking-widest mb-10"></p>
             
-            <div class="stars flex gap-3 justify-center mb-8" id="star-box">
+            <div class="stars flex gap-4 justify-center mb-10" id="star-box">
                 <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
             </div>
 
-            <textarea id="modal-text" placeholder="¿Qué te pareció el juego?" 
-                class="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-sm h-32 mb-6 focus:outline-none focus:border-[#E8384D] transition-colors resize-none"></textarea>
+            <textarea id="modal-text" placeholder="Escribe tu opinión técnica sobre la optimización y el gameplay..." 
+                class="w-full bg-white/5 border border-white/10 rounded-3xl p-6 text-sm h-40 mb-8 focus:outline-none focus:border-[#E8384D] transition-all resize-none shadow-inner"></textarea>
             
-            <button onclick="App.saveReview()" class="w-full btn-primary py-4 rounded-2xl font-800 text-[11px] uppercase tracking-widest">Confirmar Registro</button>
-            <button onclick="UI.modal(false)" class="w-full mt-4 text-zinc-600 text-[10px] font-bold uppercase tracking-widest hover:text-white transition">Cancelar</button>
+            <div class="flex flex-col gap-4">
+                <button onclick="App.saveReview()" class="w-full bg-[#E8384D] text-white py-5 rounded-2xl font-800 text-[11px] uppercase tracking-widest hover:brightness-125 transition-all shadow-lg shadow-red-900/20">Guardar en Base de Datos</button>
+                <button onclick="UI.modal(false)" class="w-full text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em] hover:text-white transition">Cancelar</button>
+            </div>
         </div>
     </div>
 
     <div id="terminal" onclick="this.classList.toggle('open')">
-        <span id="term-content"></span>
+        <div id="term-content">Esperando inicialización...</div>
+        <div class="text-[9px] font-black text-zinc-500 uppercase">System Logs</div>
     </div>
 
     <script>
         /**
-         * ROBLOXD V3 - RESILIENT ENGINE
-         * Bypass 403 Forbidden & CORS
+         * ROBLOXD V3.5 - RESILIENT ARCHITECTURE
+         * Bypass 403 Forbidden & CORS with Timeout Fallback
          */
 
         const CONFIG = {
@@ -188,12 +207,13 @@
             ],
             RO_API: "https://games.rotunnel.com/v1",
             THUMB_API: "https://thumbnails.rotunnel.com/v1",
-            // Datos de reserva si la API falla (Evita el 403 visual)
+            // BASE DE DATOS DE EMERGENCIA (Si el proxy falla, carga esto al instante)
             MOCK_DATA: [
-                { id: 15768329004, name: "Blox Fruits", playing: 450200, visits: 32000000000, creator: { name: "Gamer Robot" }, iconUrl: "https://tr.rbxcdn.com/180DAY-707624634f19d9b4b0870f7d549f3e0d/420/420/Image/Webp" },
-                { id: 920587430, name: "Adopt Me!", playing: 120500, visits: 35000000000, creator: { name: "DreamCraft" }, iconUrl: "https://tr.rbxcdn.com/180DAY-0c1737f59d4791e8433d7b37807c4273/420/420/Image/Webp" },
-                { id: 606849621, name: "Jailbreak", playing: 15000, visits: 6000000000, creator: { name: "Badimo" }, iconUrl: "https://tr.rbxcdn.com/180DAY-007d4b248a8553f18579974c20689b09/420/420/Image/Webp" },
-                { id: 2788229976, name: "Brookhaven RP", playing: 380000, visits: 42000000000, creator: { name: "Wolfpaq" }, iconUrl: "https://tr.rbxcdn.com/180DAY-a5676e626e386053308316f066539e6c/420/420/Image/Webp" }
+                { id: 15768329004, name: "Blox Fruits", playing: 512000, visits: 32000000000, creator: { name: "Gamer Robot" }, iconUrl: "https://tr.rbxcdn.com/180DAY-707624634f19d9b4b0870f7d549f3e0d/420/420/Image/Webp", description: "¡Conviértete en un maestro espadachín o en un poderoso usuario de frutas!" },
+                { id: 920587430, name: "Adopt Me!", playing: 140000, visits: 35000000000, creator: { name: "DreamCraft" }, iconUrl: "https://tr.rbxcdn.com/180DAY-0c1737f59d4791e8433d7b37807c4273/420/420/Image/Webp", description: "¡Adopta mascotas, decora tu casa y explora la Isla de la Adopción!" },
+                { id: 606849621, name: "Jailbreak", playing: 12500, visits: 6000000000, creator: { name: "Badimo" }, iconUrl: "https://tr.rbxcdn.com/180DAY-007d4b248a8553f18579974c20689b09/420/420/Image/Webp", description: "Orquestar un robo o atrapar criminales en este mundo abierto." },
+                { id: 2788229976, name: "Brookhaven RP", playing: 420000, visits: 45000000000, creator: { name: "Wolfpaq" }, iconUrl: "https://tr.rbxcdn.com/180DAY-a5676e626e386053308316f066539e6c/420/420/Image/Webp", description: "Un lugar para pasar el rato con personas de ideas afines." },
+                { id: 1234567, name: "Pet Simulator 99!", playing: 85000, visits: 1000000000, creator: { name: "BIG Games" }, iconUrl: "https://tr.rbxcdn.com/180DAY-213c90060965d13149488a70c06f363c/420/420/Image/Webp", description: "¡Colecciona mascotas y conviértete en el más rico!" }
             ]
         };
 
@@ -201,32 +221,38 @@
             games: [],
             selected: null,
             rating: 0,
-            reviews: JSON.parse(localStorage.getItem('rbxd_revs') || '[]')
+            reviews: JSON.parse(localStorage.getItem('rbxd_revs_v3') || '[]')
         };
 
         const Router = {
             go(id) {
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                document.getElementById(`view-${id}`).classList.add('active');
+                const el = document.getElementById(`view-${id}`);
+                el.classList.add('active');
                 if(id === 'profile') UI.drawProfile();
                 window.scrollTo(0,0);
+                UI.log(`Mapsd to: ${id}`);
             }
         };
 
         const API = {
-            async fetch(url) {
-                // Rotación de proxies para evadir 403
+            async fetchWithTimeout(url, ms = 3500) {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), ms);
+
+                // Rotación de proxies
                 for (let proxy of CONFIG.PROXIES) {
                     try {
-                        UI.log(`Bypass: Intentando con ${proxy.split('/')[2]}...`);
-                        const res = await fetch(proxy + encodeURIComponent(url));
-                        if (res.ok) {
-                            UI.log("Conexión Exitosa", "success");
-                            return await res.json();
-                        }
-                    } catch (e) { continue; }
+                        UI.log(`Bypass: ${proxy.split('/')[2]}...`);
+                        const response = await fetch(proxy + encodeURIComponent(url), { signal: controller.signal });
+                        clearTimeout(timeoutId);
+                        if (response.ok) return await response.json();
+                    } catch (e) {
+                        UI.log(`Fallo proxy o Timeout. Reintentando...`, 'error');
+                        continue;
+                    }
                 }
-                throw new Error("API Bloqueada");
+                throw new Error("All proxies failed");
             },
 
             async getGames(query = "popular") {
@@ -234,12 +260,13 @@
                 UI.status("Conectando...", "yellow");
                 
                 try {
-                    const data = await this.fetch(`${CONFIG.RO_API}/games/list?keyword=${query}&maxRows=15`);
+                    UI.log("Iniciando Handshake con RoTunnel...");
+                    const data = await this.fetchWithTimeout(`${CONFIG.RO_API}/games/list?keyword=${query}&maxRows=15`);
                     const ids = data.games.map(g => g.universeId).join(',');
                     
                     const [details, icons] = await Promise.all([
-                        this.fetch(`${CONFIG.RO_API}/games?universeIds=${ids}`),
-                        this.fetch(`${CONFIG.THUMB_API}/games/icons?universeIds=${ids}&size=150x150&format=Png`)
+                        this.fetchWithTimeout(`${CONFIG.RO_API}/games?universeIds=${ids}`),
+                        this.fetchWithTimeout(`${CONFIG.THUMB_API}/games/icons?universeIds=${ids}&size=150x150&format=Png`)
                     ]);
 
                     STATE.games = details.data.map(g => ({
@@ -248,43 +275,53 @@
                     }));
 
                     UI.drawGrid(STATE.games);
-                    UI.status("RoTunnel Online", "green");
+                    UI.status("API Live", "green");
+                    UI.log("Conexión exitosa. Datos sincronizados.", "success");
+
                 } catch (e) {
-                    UI.log("Error 403 / CORS detectado. Activando SafeMode.", "error");
-                    UI.status("Modo Offline", "red");
+                    UI.log("Proxy saturado o 403. Activando SafeMode.", "error");
+                    UI.status("SafeMode Activo", "red");
                     STATE.games = CONFIG.MOCK_DATA;
                     UI.drawGrid(STATE.games);
+                    UI.toast("Usando base de datos local (Offline)");
                 }
             }
         };
 
         const UI = {
-            log(m, type = "") {
-                const t = document.getElementById('term-content');
-                const color = type === 'error' ? '#f44' : (type === 'success' ? '#0f0' : '#888');
-                t.innerHTML = `<span style="color:${color}">[${new Date().toLocaleTimeString()}] ${m}</span>`;
+            log(msg, type = "") {
+                const term = document.getElementById('term-content');
+                const time = new Date().toLocaleTimeString();
+                const color = type === 'error' ? '#ff4d4d' : (type === 'success' ? '#00ff00' : '#888');
+                term.innerHTML = `<div class="log-line"><span style="color:${color}">[${time}]</span> ${msg}</div>`;
             },
 
             status(txt, color) {
                 const d = document.getElementById('dot');
                 const t = document.getElementById('status-text');
-                d.className = `w-2 h-2 rounded-full bg-${color}-500 animate-pulse`;
+                d.className = `w-2.5 h-2.5 rounded-full bg-${color}-500 animate-pulse`;
                 t.innerText = txt;
+                t.style.color = color === 'red' ? '#ff4d4d' : (color === 'green' ? '#00ff00' : '#888');
             },
 
             skeletons() {
-                document.getElementById('grid').innerHTML = Array(10).fill('<div class="h-64 rounded-3xl shimmer"></div>').join('');
+                document.getElementById('grid').innerHTML = Array(10).fill('<div class="h-72 rounded-[2rem] shimmer"></div>').join('');
             },
 
             drawGrid(list) {
                 document.getElementById('grid').innerHTML = list.map(g => `
-                    <div class="game-card flex flex-col cursor-pointer" onclick="App.open(${g.id})">
-                        <img src="${g.iconUrl}" class="w-full aspect-square object-cover rounded-t-[28px]">
+                    <div class="game-card flex flex-col cursor-pointer group" onclick="App.open(${g.id})">
+                        <div class="overflow-hidden h-48 bg-zinc-900">
+                            <img src="${g.iconUrl}" class="w-full h-full object-cover">
+                        </div>
                         <div class="p-6">
-                            <h5 class="font-800 text-[13px] truncate mb-2">${g.name}</h5>
+                            <h5 class="font-800 text-[13px] truncate mb-3">${g.name}</h5>
                             <div class="flex justify-between items-center">
-                                <span class="text-[9px] text-zinc-500 font-black uppercase tracking-widest">${g.creator.name}</span>
-                                <span class="text-green-500 font-bold text-[11px]">${(g.playing/1000).toFixed(1)}k</span>
+                                <span class="text-[9px] text-zinc-600 font-black uppercase tracking-widest">${g.creator.name}</span>
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                                    <span class="text-green-500 font-black text-[11px]">${(g.playing/1000).toFixed(1)}K</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -293,23 +330,28 @@
 
             drawDetail(g) {
                 document.getElementById('detail-container').innerHTML = `
-                    <div class="flex flex-col lg:flex-row gap-16">
-                        <div class="w-full lg:w-80 shrink-0">
-                            <img src="${g.iconUrl}" class="w-full rounded-[3rem] shadow-2xl border border-white/10">
-                            <button onclick="UI.modal(true)" class="w-full mt-8 btn-primary py-5 rounded-2xl font-800 text-[11px] uppercase tracking-widest">Añadir Review</button>
-                            <button onclick="Router.go('home')" class="w-full mt-4 text-zinc-500 text-[10px] font-black uppercase tracking-widest">← Volver</button>
+                    <div class="flex flex-col lg:flex-row gap-16 animate-in slide-in-from-bottom-10 duration-500">
+                        <div class="w-full lg:w-96 shrink-0">
+                            <div class="relative group">
+                                <img src="${g.iconUrl}" class="w-full rounded-[3.5rem] shadow-2xl border border-white/10 relative z-10">
+                                <div class="absolute -inset-4 bg-[#E8384D]/20 blur-3xl rounded-full opacity-50 group-hover:opacity-100 transition duration-1000"></div>
+                            </div>
+                            <button onclick="UI.modal(true)" class="w-full mt-10 bg-[#E8384D] text-white py-6 rounded-[2rem] font-800 text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-red-900/20 hover:scale-105 transition-all">Generar Review</button>
+                            <button onclick="Router.go('home')" class="w-full mt-6 text-zinc-600 text-[10px] font-black uppercase tracking-widest hover:text-white transition">← Explorar mas</button>
                         </div>
                         <div class="flex-1">
-                            <h2 class="text-6xl font-800 tracking-tighter mb-6">${g.name}</h2>
-                            <p class="text-xl text-zinc-400 leading-relaxed mb-10">${g.description || "Descripción no disponible en este momento."}</p>
-                            <div class="flex gap-6">
-                                <div class="bg-zinc-900 p-6 rounded-3xl border border-white/5 flex-1">
-                                    <span class="text-[10px] font-black text-zinc-500 uppercase block mb-1">Activos</span>
-                                    <span class="text-3xl font-800 text-green-500">${g.playing.toLocaleString()}</span>
+                            <div class="badge-ccu mb-6 inline-block">Métricas Verificadas</div>
+                            <h2 class="text-7xl font-800 tracking-tighter mb-8 leading-[0.9]">${g.name}</h2>
+                            <p class="text-xl text-zinc-400 leading-relaxed mb-12 max-w-2xl">${g.description || "Este universo no ha proporcionado un manifiesto descriptivo."}</p>
+                            
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="bg-zinc-900/50 p-8 rounded-[2.5rem] border border-white/5">
+                                    <span class="text-[10px] font-black text-zinc-600 uppercase tracking-widest block mb-2">Concurrentes</span>
+                                    <span class="text-4xl font-800 text-green-500">${g.playing.toLocaleString()}</span>
                                 </div>
-                                <div class="bg-zinc-900 p-6 rounded-3xl border border-white/5 flex-1">
-                                    <span class="text-[10px] font-black text-zinc-500 uppercase block mb-1">Visitas</span>
-                                    <span class="text-3xl font-800">${(g.visits/1000000000).toFixed(1)}B</span>
+                                <div class="bg-zinc-900/50 p-8 rounded-[2.5rem] border border-white/5">
+                                    <span class="text-[10px] font-black text-zinc-600 uppercase tracking-widest block mb-2">Visitas Totales</span>
+                                    <span class="text-4xl font-800 text-white">${(g.visits/1000000000).toFixed(1)}B</span>
                                 </div>
                             </div>
                         </div>
@@ -319,18 +361,27 @@
 
             drawProfile() {
                 const revs = STATE.reviews;
-                document.getElementById('stat-count').innerText = revs.length;
-                document.getElementById('stat-avg').innerText = revs.length ? (revs.reduce((a,b)=>a+b.v,0)/revs.length).toFixed(1) : "0.0";
+                const count = revs.length;
+                const avg = count ? (revs.reduce((a,b)=>a+b.v,0)/count).toFixed(1) : "0.0";
                 
+                document.getElementById('stat-count').innerText = count;
+                document.getElementById('stat-avg').innerText = avg;
+                
+                if(count === 0) {
+                    document.getElementById('review-list').innerHTML = `<div class="p-10 border border-dashed border-white/10 rounded-3xl text-zinc-600 text-sm text-center">No se han registrado análisis técnicos todavía.</div>`;
+                    return;
+                }
+
                 document.getElementById('review-list').innerHTML = revs.map(r => `
-                    <div class="game-card p-6 flex gap-6 items-center">
-                        <img src="${r.img}" class="w-14 h-14 rounded-xl object-cover">
+                    <div class="game-card p-8 flex gap-8 items-center group">
+                        <img src="${r.img}" class="w-20 h-20 rounded-3xl object-cover shadow-lg group-hover:rotate-3 transition">
                         <div class="flex-1">
-                            <div class="flex justify-between">
-                                <h6 class="font-800 text-sm">${r.name}</h6>
-                                <span class="text-yellow-500 text-xs">${'★'.repeat(r.v)}</span>
+                            <div class="flex justify-between items-start mb-2">
+                                <h6 class="font-800 text-lg tracking-tight">${r.name}</h6>
+                                <div class="text-yellow-500 font-bold tracking-tighter">${'★'.repeat(r.v)}</div>
                             </div>
-                            <p class="text-zinc-500 text-xs mt-1 italic">"${r.txt}"</p>
+                            <p class="text-zinc-500 text-sm italic leading-relaxed">"${r.txt}"</p>
+                            <div class="mt-4 text-[9px] font-black text-zinc-700 uppercase tracking-[0.2em]">${r.date || 'Reciente'}</div>
                         </div>
                     </div>
                 `).join('');
@@ -344,11 +395,16 @@
                 } else {
                     m.classList.add('hidden');
                 }
+            },
+
+            toast(m) {
+                UI.log(m, "info");
             }
         };
 
         const App = {
             init() {
+                UI.log("RobloxD Engine v3.5 - Villa Bosch Edition");
                 API.getGames();
                 this.events();
             },
@@ -358,12 +414,15 @@
                     s.onclick = () => {
                         const v = parseInt(s.dataset.v);
                         STATE.rating = v;
-                        document.querySelectorAll('#star-box span').forEach((el, i) => el.classList.toggle('active', i < v));
+                        document.querySelectorAll('#star-box span').forEach((el, i) => {
+                            el.classList.toggle('active', i < v);
+                        });
                     };
                 });
             },
 
             search(q) {
+                UI.log(`Buscando: ${q}...`);
                 API.getGames(q);
             },
 
@@ -374,20 +433,27 @@
             },
 
             saveReview() {
-                if(!STATE.rating) return;
+                if(!STATE.rating) return UI.toast("Error: Falta calificación.");
                 const txt = document.getElementById('modal-text').value;
                 STATE.reviews.unshift({
                     name: STATE.selected.name,
                     img: STATE.selected.iconUrl,
                     v: STATE.rating,
-                    txt: txt
+                    txt: txt || "Sin comentarios adicionales.",
+                    date: new Date().toLocaleDateString()
                 });
-                localStorage.setItem('rbxd_revs', JSON.stringify(STATE.reviews));
+                localStorage.setItem('rbxd_revs_v3', JSON.stringify(STATE.reviews));
                 UI.modal(false);
+                UI.log("Review guardada exitosamente", "success");
                 Router.go('profile');
+                // Reset modal
+                document.getElementById('modal-text').value = '';
+                STATE.rating = 0;
+                document.querySelectorAll('#star-box span').forEach(el => el.classList.remove('active'));
             }
         };
 
+        // RUN
         App.init();
     </script>
 </body>
